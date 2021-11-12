@@ -27,20 +27,20 @@ let pokemonRepository = (function() {
       let listItem = document.createElement ('li');
       let button = document.createElement('button');
       button.innerText = pokemon.name.toUpperCase();
-      button.classList.add('fancyButton');
-      listItem.classList.add('group-list-item');
+      button.classList.add('btn', 'btn-success');
+      listItem.classList.add('list-group-item');
       button.setAttribute('data-toggle','modal')
       button.setAttribute('data-target','#targetModal')
       listItem.appendChild(button)
       list.appendChild(listItem)
-      button.addEventListener('click', function(pokemont){
+      button.addEventListener('click', function(){
         showDetails(pokemon);
       });
     }
 
     function showDetails(pokemon) {
       loadDetails(pokemon).then(function () {
-      showModal(pokemon);
+      showModal(pokemon)
       console.log(pokemon);
       });
     }
@@ -67,9 +67,9 @@ let pokemonRepository = (function() {
      return fetch(url).then(function (response) {
        return response.json();
      }).then(function (details) {
-       item.imageUrl = details.sprites.front_default,
-       item.height = details.height,
-       item.types = details.types
+       item.imageUrl = details.sprites.other.dream_world.front_default;
+       item.height = details.height;
+       item.types = details.types;
        item.weight = details.weight;
      }).catch(function (e) {
        console.error(e);
@@ -144,6 +144,15 @@ let pokemonRepository = (function() {
       pokemonList.pop();
     }
 
+    $(document).ready(function () {
+      $('#search-input').on('keyup', function () {
+        var value = $(this).val().toLowerCase();
+        $('.pokemon-list .list-group-item').filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+      });
+    });
+    
     return {
       add: add,
       getAll: getAll,
